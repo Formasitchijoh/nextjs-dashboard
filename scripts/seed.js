@@ -3,7 +3,7 @@ const {
   invoices,
   customers,
   revenue,
-  users,
+ users
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
@@ -23,6 +23,7 @@ async function seedUsers(client) {
     console.log(`Created "users" table`);
 
     // Insert data into the "users" table
+    //The Promise.all execute all the queries at once for the users
     const insertedUsers = await Promise.all(
       users.map(async (user) => {
         const hashedPassword = await bcrypt.hash(user.password, 10);

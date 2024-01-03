@@ -9,16 +9,38 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-
+import { updateInvoice } from '@/app/lib/actions';
+import { useFormState } from 'react-dom';
 export default function EditInvoiceForm({
   invoice,
   customers,
 }: {
   invoice: InvoiceForm;
   customers: CustomerField[];
-}) {
+}) { 
+  type State = {
+    message: string | null;
+    errors: { [key: string]: string };
+  };
+  
+  const initialState: State = {
+    message: null,
+    errors: {},
+  };
+  
+  const updateInvoiceWithId = async (state: State, formData: FormData): Promise<State> => {
+    const result = await updateInvoice(state, invoice.id, formData);
+    if ('errors' in result) {
+      // Handle error case if needed
+    }
+    return state;
+  };
+  
+  const [state, dispatch] = useFormState(updateInvoiceWithId, initialState);
+
+
   return (
-    <form>
+    <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
